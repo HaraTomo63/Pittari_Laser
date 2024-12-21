@@ -111,19 +111,19 @@ class Game:
     def update(self):
         
         if self.show_title_screen:
-            if pyxel.btnp(pyxel.KEY_RETURN) or pyxel.btnp(pyxel.KEY_SPACE):
+            if pyxel.btnp(pyxel.KEY_RETURN) or pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT) or pyxel.btnp(pyxel.KEY_SPACE):
                 self.show_title_screen = False
             return
 
         if self.is_game_over:
-            if pyxel.btnp(pyxel.KEY_RETURN) or pyxel.btnp(pyxel.KEY_SPACE):
+            if pyxel.btnp(pyxel.KEY_RETURN) or pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT) or pyxel.btnp(pyxel.KEY_SPACE):
                 self.reset_game()
             return
 
         if self.display_player:
             self.circle_angle = (self.circle_angle + self.circle_speed) % 360
 
-        if pyxel.btnp(pyxel.KEY_SPACE) and self.laser is None:
+        if  (pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT)) or (pyxel.btnp(pyxel.KEY_SPACE)) and self.laser is None:
             angle = math.radians(self.circle_angle)
             self.laser = Laser(
                 PLAYER_X + math.cos(angle) * CIRCLE_RADIUS,
