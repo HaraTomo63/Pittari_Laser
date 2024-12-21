@@ -158,13 +158,13 @@ class Game:
         pyxel.cls(0)
         
         if self.show_title_screen:
-            pyxel.text(35, 60, "PITTARI LASER", 8)
-            pyxel.text(23, 100, "PRESS SPACE TO START", (pyxel.frame_count)//4 % 16)
+            pyxel.text(32, 60, "PITTARI LASER", 8)
+            pyxel.text(35, 100, "TAP TO START", (pyxel.frame_count)//4 % 16)
             return
         
         if self.is_game_over:
             pyxel.text(40, 70, "GAME OVER", 8)
-            pyxel.text(30, 90, "PRESS TO RESTART", 7)
+            pyxel.text(30, 90, "TAP TO RESTART", 7)
             pyxel.text(40, 110, f"SCORE: {self.score}", 7)
             return
 
@@ -186,6 +186,6 @@ class Game:
 
         pyxel.text(5, 3, f"SCORE: {self.score}", 7)
         pyxel.rect(0, pyxel.height - 20, pyxel.width, 20, 6)
-        pyxel.text(pyxel.width // 2 - 23, pyxel.height - 15, "PRESS SPACE", 7)
+        pyxel.text(pyxel.width // 2 - 33, pyxel.height - 15, "TAP or PRESS SPACE", 7)
 
 Game()
