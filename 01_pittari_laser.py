@@ -85,7 +85,7 @@ class Target:
 
 class Game:
     def __init__(self):
-        pyxel.init(120, 160, title="Click Laser Game")
+        pyxel.init(120, 160, title="Pittari Laser")
         self.reset_game()
         self.show_title_screen = True
         pyxel.run(self.update, self.draw)
