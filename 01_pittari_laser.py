@@ -20,6 +20,8 @@ BOUNDARY_X_MAX = 110
 BOUNDARY_Y_MIN = 10
 BOUNDARY_Y_MAX = 110
 
+INITIAL_LIVES = 3
+
 class Laser:
     def __init__(self, x, y, angle):
         self.positions = [(x, y)]  # Track positions for afterimage
@@ -96,6 +98,7 @@ class Game:
         self.laser = None
         self.is_game_over = False
         self.display_player = True
+        self.lives = INITIAL_LIVES
         self.spawn_targets()
         self.circle_angle = 0
 
@@ -109,7 +112,6 @@ class Game:
         ]
 
     def update(self):
-        
         if self.show_title_screen:
             if pyxel.btnp(pyxel.KEY_RETURN) or pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT) or pyxel.btnp(pyxel.KEY_SPACE):
                 self.show_title_screen = False
@@ -123,7 +125,7 @@ class Game:
         if self.display_player:
             self.circle_angle = (self.circle_angle + self.circle_speed) % 360
 
-        if  (pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT)) or (pyxel.btnp(pyxel.KEY_SPACE)) and self.laser is None:
+        if (pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT) or pyxel.btnp(pyxel.KEY_SPACE)) and self.laser is None:
             angle = math.radians(self.circle_angle)
             self.laser = Laser(
                 PLAYER_X + math.cos(angle) * CIRCLE_RADIUS,
@@ -139,7 +141,6 @@ class Game:
 
             if not self.laser.is_active:
                 if all(target.is_hit() for target in self.targets):
-                    # Add hit reflections to score for each target
                     for target in self.targets:
                         if target.hit_reflections is not None:
                             self.score += target.hit_reflections + 1
@@ -149,19 +150,21 @@ class Game:
                         self.circle_speed += 1
                     self.spawn_targets()
                 else:
-                    self.is_game_over = True
+                    self.lives -= 1
+                    if self.lives <= 0:
+                        self.is_game_over = True
 
                 self.laser = None
                 self.display_player = True
 
     def draw(self):
         pyxel.cls(0)
-        
+
         if self.show_title_screen:
             pyxel.text(32, 60, "PITTARI LASER", 8)
-            pyxel.text(35, 100, "TAP TO START", (pyxel.frame_count)//4 % 16)
+            pyxel.text(35, 100, "TAP TO START", (pyxel.frame_count) // 4 % 16)
             return
-        
+
         if self.is_game_over:
             pyxel.text(40, 70, "GAME OVER", 8)
             pyxel.text(30, 90, "TAP TO RESTART", 7)
@@ -185,6 +188,16 @@ class Game:
             target.draw()
 
         pyxel.text(5, 3, f"SCORE: {self.score}", 7)
+
+        # Draw lives in the top-right corner
+        for i in range(INITIAL_LIVES):
+            x = pyxel.width - 7 * (i + 1)
+            y = 5
+            if i < self.lives:
+                pyxel.circ(x, y, 2, 3)  # Circle for remaining lives
+            else:
+                pyxel.text(x - 2, y - 2, "x", 8)  # "x" for lost lives
+
         pyxel.rect(0, pyxel.height - 20, pyxel.width, 20, 6)
         pyxel.text(pyxel.width // 2 - 33, pyxel.height - 15, "TAP or PRESS SPACE", 7)
 
