@@ -187,7 +187,7 @@ class Game:
         for target in self.targets:
             target.draw()
 
-        pyxel.text(5, 3, f"01-SCORE: {self.score}", 7)
+        pyxel.text(5, 3, f"SCORE: {self.score}", 7)
 
         # Draw lives in the top-right corner
         for i in range(INITIAL_LIVES):
